@@ -19,19 +19,15 @@ public class GameController : Singletone<GameController>
 
     //private SaveDataTransform data_test = new SaveDataTransform();
    // private List<SaveDataTransform> data = new List<SaveDataTransform>();
-   private SaveData data = new SaveData();
+   //private SaveData data = new SaveData();
 
     private void Start()
     {
         CreateBlock(BlockPrefab.transform);
         //DEBUG
-        // string filename = "MyListTest.JSON";
-        // string path = Application.persistentDataPath + "/" + filename;
-        // string contentLoad = File.ReadAllText(path);
-        // SaveData dataLoad = new SaveData();
-        // dataLoad = JsonUtility.FromJson<SaveData>(contentLoad);
-        // foreach (var block in dataLoad.list)
-        // {
+        // Saving.Instance.Read();
+        // foreach (var block in Saving.Instance.Data.list)
+        // { 
         //     CreateBlock(block.Position, block.Scale);
         // }
         //end DEBUG
@@ -103,54 +99,60 @@ public class GameController : Singletone<GameController>
         var stack = Base.gameObject.GetComponentsInChildren<BlockCollision>();
         foreach (var block in stack)
         {
-            data.add(block.transform);
+            //data.add(block.transform);
+            //Saving.Instance.Data.Add(block.transform);
+            Saving.Instance.Append(block.transform);
         }
 
-        data.Score = 123f;
-        data.UpdateDate();
-        string filename = "MyListTest.JSON";
-        string path = Application.persistentDataPath + "/" +filename;
-        string content = JsonUtility.ToJson(data);
+        Saving.Instance.Append(123);
+        //Saving.Instance.Data.Score = 123;
+        //data.Score = 123f;
+        //data.UpdateDate();
+        //string filename = "MyListTest.JSON";
+        //string path = Application.persistentDataPath + "/" + filename;
+        //string content = JsonUtility.ToJson(data);
        // string content2 = JsonConvert.SerializeObject(data);
-        File.WriteAllText (path, content);
-        SaveData dataLoad = new SaveData();
-        string contentLoad = File.ReadAllText(path);
-        dataLoad = JsonUtility.FromJson<SaveData>(contentLoad);
-        Debug.Log(path);
+        //File.WriteAllText (path, content);
+        Saving.Instance.Write();
+        
+        //SaveData dataLoad = new SaveData();
+        //string contentLoad = File.ReadAllText(path);
+        //dataLoad = JsonUtility.FromJson<SaveData>(contentLoad);
+        
     }
 
-    [System.Serializable] 
-    private class BlockData
-    {
-        public Vector3 Position;
-        public Quaternion Rotation;
-        public Vector3 Scale;
-
-        public BlockData(Transform t)
-        {
-            Position = t.position;
-            Rotation = t.rotation;
-            Scale = t.localScale;
-        }
-    }
+    // [System.Serializable] 
+    // private class Element
+    // {
+    //     public Vector3 Position;
+    //     public Quaternion Rotation;
+    //     public Vector3 Scale;
+    //
+    //     public Element(Transform t)
+    //     {
+    //         Position = t.position;
+    //         Rotation = t.rotation;
+    //         Scale = t.localScale;
+    //     }
+    // }
     
-    [System.Serializable] 
-    private class SaveData
-    {
-        public string _dateTime;
-        public float _score = 0f;
-        public List<BlockData> list = new List<BlockData>();
-        public float Score { get ; set; }
-
-        public void add(Transform _transform)
-        {
-            list.Add(new BlockData(_transform));
-        }
-
-        public void UpdateDate()
-        {
-            _dateTime = DateTime.Now.ToString();
-        }
-    }
+    // [System.Serializable] 
+    // private class SaveData
+    // {
+    //     public string _dateTime;
+    //     public float _score = 0f;
+    //     public List<Element> list = new List<Element>();
+    //     public float Score { get ; set; }
+    //
+    //     public void add(Transform _transform)
+    //     {
+    //         list.Add(new Element(_transform));
+    //     }
+    //
+    //     public void UpdateDate()
+    //     {
+    //         _dateTime = DateTime.Now.ToString();
+    //     }
+    // }
     
 }
