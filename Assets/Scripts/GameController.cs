@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using Newtonsoft.Json;
 
 public class GameController : Singletone<GameController>
 {
