@@ -6,32 +6,51 @@ namespace Assets.Scripts.UI
 {
     public class ClickDetect : MonoBehaviour, IPointerClickHandler
     {
-        public event Action EventStartTapClick;
-        public bool LockTapClick { get; private set; }
+        public event Action EventEndScreen;
+        private Animator _animator = null;
+        private bool _lockTapClick = true;
 
         public void Awake()
         {
+            _animator = GetComponent<Animator>();
             LockTap();
+            GameController.Instance.EventChangeRecord += OnRestart;
+        }
+
+        private void OnDestroy()
+        {
+            GameController.Instance.EventChangeRecord -= OnRestart;
         }
 
         public void LockTap()
         {
-            LockTapClick = true;
+            _lockTapClick = true;
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (!LockTapClick)
+            if (!_lockTapClick)
             {
+                _animator.SetTrigger("End");
                 Debug.Log($"OnPointerClick");
-                EventStartTapClick?.Invoke();
+                LockTap();
             }
+        }
+
+        private void EndScreenAnimation()
+        {
+            Debug.Log($"EndAnimation");
+            _lockTapClick = false;
         }
 
         private void EndAnimation()
         {
-            Debug.Log($"EndAnimation");
-            LockTapClick = false;
+            EventEndScreen?.Invoke();
+        }
+
+        private void OnRestart()
+        {
+            _animator.SetTrigger("Start");
         }
     }
 }

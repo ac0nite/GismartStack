@@ -6,36 +6,25 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    private Animator _animator = null;
     [SerializeField] private ClickDetect _tapDetect = null;
     public event Action EventGoGame;
     
     void Awake()
     {
-        _tapDetect.EventStartTapClick += OnStartTapClick;
-        GameController.Instance.EventReStart += OnReStart;
+        _tapDetect.EventEndScreen += OnEndScreen;
     }
 
     void Start()
     {
-        _animator = GetComponentInChildren<Animator>();
+       // _animator = GetComponentInChildren<Animator>();
     }
 
     void Destroy()
     {
-        _tapDetect.EventStartTapClick -= OnStartTapClick;
+        _tapDetect.EventEndScreen += OnEndScreen;
     }
-    
-    private void OnStartTapClick()
+    private void OnEndScreen()
     {
-        _animator.SetTrigger("End");
-        _tapDetect.EventStartTapClick -= OnStartTapClick;
         EventGoGame?.Invoke();
-    }
-
-    private void OnReStart()
-    {
-        _tapDetect.EventStartTapClick += OnStartTapClick;
-        _animator.SetTrigger("Start");
     }
 }
