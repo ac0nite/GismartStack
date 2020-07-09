@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Assets.Scripts.UI;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : Singletone<GameController>
 {
@@ -14,15 +16,23 @@ public class GameController : Singletone<GameController>
     [SerializeField] public float Speed = 10f;
     [SerializeField] private float _incrementSpeed = 0.1f;
 
-    public event Action EventTapDown;
+    [SerializeField] private ClickDetect _tapDetect = null;
+    [SerializeField] private UIManager _uiManager = null;
 
-    //private SaveDataTransform data_test = new SaveDataTransform();
-   // private List<SaveDataTransform> data = new List<SaveDataTransform>();
-   //private SaveData data = new SaveData();
+    public event Action EventTapDown;
+    public event Action EventReStart;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        _tapDetect.EventStartTapClick += OnStartTapClick;
+        _uiManager.EventGoGame += OnGoGame;
+    }
 
     private void Start()
     {
-        CreateBlock(BlockPrefab.transform);
+        //CreateBlock(BlockPrefab.transform);
+
         //DEBUG
         // Saving.Instance.Read();
         // foreach (var block in Saving.Instance.Data.list)
@@ -34,8 +44,8 @@ public class GameController : Singletone<GameController>
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-            EventTapDown?.Invoke();
+        //if(Input.GetKeyDown(KeyCode.Space))
+        //    EventTapDown?.Invoke();
     }
 
     private void OnDestroyBlock(BlockCollision _nextBlock, BlockCollision _oldBlock)
@@ -120,38 +130,28 @@ public class GameController : Singletone<GameController>
         
     }
 
-    // [System.Serializable] 
-    // private class Element
-    // {
-    //     public Vector3 Position;
-    //     public Quaternion Rotation;
-    //     public Vector3 Scale;
-    //
-    //     public Element(Transform t)
-    //     {
-    //         Position = t.position;
-    //         Rotation = t.rotation;
-    //         Scale = t.localScale;
-    //     }
-    // }
-    
-    // [System.Serializable] 
-    // private class SaveData
-    // {
-    //     public string _dateTime;
-    //     public float _score = 0f;
-    //     public List<Element> list = new List<Element>();
-    //     public float Score { get ; set; }
-    //
-    //     public void add(Transform _transform)
-    //     {
-    //         list.Add(new Element(_transform));
-    //     }
-    //
-    //     public void UpdateDate()
-    //     {
-    //         _dateTime = DateTime.Now.ToString();
-    //     }
-    // }
-    
+    private void OnDestroy()
+    {
+        _tapDetect.EventStartTapClick -= OnStartTapClick;
+        _uiManager.EventGoGame -= OnGoGame;
+    }
+
+    private void OnStartTapClick()
+    {
+        EventTapDown?.Invoke();
+    }
+
+    private void OnGoGame()
+    {
+        Debug.Log($"OnGoGame");
+        CreateBlock(BlockPrefab.transform);
+
+        //DEBUG
+        // Saving.Instance.Read();
+        // foreach (var block in Saving.Instance.Data.list)
+        // { 
+        //     CreateBlock(block.Position, block.Scale);
+        // }
+        //end DEBUG
+    }
 }
