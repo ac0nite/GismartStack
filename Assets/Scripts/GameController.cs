@@ -146,7 +146,8 @@ public class GameController : Singletone<GameController>
             }
 
             blocks[0].CollisionDetect = true;
-            Base.transform.Translate(Vector3.up);
+            Base.transform.SetPositionAndRotation(new Vector3(1f, 0f, 1f), Base.transform.rotation);
+            //Base.transform.Translate(new Vector3(1f,0f,1f));
         }
     }
 }
