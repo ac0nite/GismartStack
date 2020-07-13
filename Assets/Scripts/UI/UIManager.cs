@@ -19,10 +19,11 @@ public class UIManager : MonoBehaviour
        // _animator = GetComponentInChildren<Animator>();
     }
 
-    void Destroy()
+    private void OnDestroy()
     {
-        _tapDetect.EventEndScreen += OnEndScreen;
+        _tapDetect.EventEndScreen -= OnEndScreen;
     }
+
     private void OnEndScreen()
     {
         EventGoGame?.Invoke();

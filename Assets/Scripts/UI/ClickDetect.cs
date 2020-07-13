@@ -7,6 +7,7 @@ namespace Assets.Scripts.UI
     public class ClickDetect : MonoBehaviour, IPointerClickHandler
     {
         public event Action EventEndScreen;
+        public event Action EventEndLoadScreen;
         private Animator _animator = null;
         private bool _lockTapClick = true;
 
@@ -41,6 +42,7 @@ namespace Assets.Scripts.UI
         {
             Debug.Log($"EndAnimation");
             _lockTapClick = false;
+            EventEndLoadScreen?.Invoke();
         }
 
         private void EndAnimation()

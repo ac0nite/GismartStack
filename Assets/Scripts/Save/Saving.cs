@@ -35,11 +35,21 @@ public class Saving : Singletone<Saving>
         File.WriteAllText(path, content);
     }
 
-    public void Read()
+    public bool Read()
     {
         string path = Application.persistentDataPath + "/" + _file;
-        string content = File.ReadAllText(path);
-        Data.Clear();
-        Data = JsonUtility.FromJson<Data>(content);
+        if (File.Exists(path))
+        {
+            string content = File.ReadAllText(path);
+            Data.Clear();
+            Data = JsonUtility.FromJson<Data>(content);
+            return true;
+        }
+        else
+        {
+            Debug.Log($"File not found {path}");
+        }
+
+        return false;
     }
 }

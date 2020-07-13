@@ -39,11 +39,19 @@ public class CameraManager : MonoBehaviour
 
     private void OnChangeCameraView()
     {
-        //lerp
-       // _camera.pixelHeight
-       var blocks = BaseCube.GetComponentsInChildren<BlockCollision>();
-       Debug.Log($"blocks length = {blocks.Length}");
-        //var blocks2 = blocks.OrderBy(a => _camera.WorldToViewportPoint(a.transform.position).magnitude);
+        ChangeViewCamera();
+    }
+
+    public void ChangeViewCamera()
+    {
+        var blocks = BaseCube.GetComponentsInChildren<BlockCollision>();
+        if (blocks.Length == 1)
+        {
+            _nextViewCamera = _defualtTransformCamera.position;
+            return;
+        }
+        
+        Debug.Log($"blocks length = {blocks.Length}");
         var blocks2 = blocks.ToList();
 
         float max = blocks2.Max(b => _camera.WorldToViewportPoint(b.transform.position).magnitude);
@@ -51,16 +59,13 @@ public class CameraManager : MonoBehaviour
 
         Debug.Log($"max: {max}  min: {min}");
 
-        var tmp = _nextViewCamera.normalized * (_nextViewCamera.magnitude + (max - min));
+        _nextViewCamera = _nextViewCamera.normalized * (_nextViewCamera.magnitude + (max - min) * 1.2f);
 
-        //_nextViewCamera = new Vector3(_nextViewCamera.x, _nextViewCamera.y, _nextViewCamera.z + (max - min));
-        _nextViewCamera = tmp;
-
-        foreach (var block in blocks)
-       {
-            Debug.Log($"ViePortBlock: {_camera.WorldToViewportPoint(block.transform.position)}  position: {block.transform.position}", block);
-       }
-}
+        // foreach (var block in blocks)
+        // {
+        //     Debug.Log($"ViePortBlock: {_camera.WorldToViewportPoint(block.transform.position)}  position: {block.transform.position}", block);
+        // }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -77,7 +82,7 @@ public class CameraManager : MonoBehaviour
     void LateUpdate()
     {
         _currentViewCamera = Vector3.Lerp(_camera.transform.position, _nextViewCamera, 0.5f * Time.deltaTime);
-        Debug.Log($"c:{_camera.transform.position}  n:{_currentViewCamera}");
+//        Debug.Log($"c:{_camera.transform.position}  n:{_currentViewCamera}");
         _camera.transform.SetPositionAndRotation(_currentViewCamera, _camera.transform.rotation);
         //_camera.transform.Translate(_currentViewCamera);
     }

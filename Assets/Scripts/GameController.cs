@@ -16,6 +16,8 @@ public class GameController : Singletone<GameController>
     [SerializeField] public Transform Base = null;
     [SerializeField] public float Speed = 10f;
     [SerializeField] private float _incrementSpeed = 0.1f;
+    [SerializeField] private CameraManager _cameraManager = null;
+    [SerializeField] private ClickDetect _clickDetect = null;
     private bool _game = false;
 
     //[SerializeField] private ClickDetect _tapDetect = null;
@@ -30,6 +32,7 @@ public class GameController : Singletone<GameController>
     {
         base.Awake();
         _uiManager.EventGoGame += OnGoGame;
+        _clickDetect.EventEndLoadScreen += OnLoadPreviousRound;
     }
 
     private void Start()
@@ -80,12 +83,13 @@ public class GameController : Singletone<GameController>
         Speed += _incrementSpeed;
     }
 
-    private void CreateBlock(Vector3 position, Vector3 localScale)
+    private BlockCollision CreateBlock(Vector3 position, Vector3 localScale)
     {
         var block = Instantiate(BlockPrefab);
         block.transform.localScale = localScale;
         block.transform.SetPositionAndRotation(position, Quaternion.identity);
         block.Movement.Stop();
+        return block;
     }
     
     private void OnExitRaund(BlockCollision _oldBlock)
@@ -111,6 +115,7 @@ public class GameController : Singletone<GameController>
     {
         //_tapDetect.EventStartTapClick -= OnStartTapClick;
         _uiManager.EventGoGame -= OnGoGame;
+        _clickDetect.EventEndLoadScreen -= OnLoadPreviousRound;
     }
 
     private void OnStartTapClick()
@@ -118,11 +123,28 @@ public class GameController : Singletone<GameController>
         EventTapDown?.Invoke();
     }
 
+    private void OnLoadPreviousRound()
+    {
+        Init(true);
+        if (Saving.Instance.Read())
+        {
+            foreach (var block in Saving.Instance.Data.list)
+            { 
+                CreateBlock(block.Position, block.Scale).transform.SetParent(Base.transform);
+            }   
+        }
+        else
+        {
+            var block = CreateBlock(BlockPrefab.transform.position, BlockPrefab.transform.localScale);
+            block.transform.SetParent(Base.transform);
+            block.Movement.Stop();
+        }
+    }
     private void OnGoGame()
     {
         Debug.Log($"OnGoGame");
 
-        Init();
+        Init(false);
         
         CreateBlock(BlockPrefab.transform);
         _game = true;
@@ -135,19 +157,38 @@ public class GameController : Singletone<GameController>
         //end DEBUG
     }
 
-    private void Init()
+    private void Init(bool clean)
     {
         var blocks = Base.GetComponentsInChildren<BlockCollision>().ToList();
-        if (blocks.Count > 1)
+        
+        //если чистая сцена
+        if (blocks.Count == 0)
         {
-            for (int i = 1; i < blocks.Count; i++)
+            CreateBlock(BlockPrefab.transform);
+        }
+        
+        //удаление всех блоков
+        if (clean)
+        {
+            foreach (var block in blocks)
             {
-                Destroy(blocks[i].gameObject);
+                Destroy(block.gameObject);
             }
+        }
+        // удалление блоков кроме нижнего + сдвигаем вверх
+        else
+        {
+            if (blocks.Count > 1)
+            {
+                for (int i = 1; i < blocks.Count; i++)
+                {
+                    Destroy(blocks[i].gameObject);
+                }
 
-            blocks[0].CollisionDetect = true;
-            Base.transform.SetPositionAndRotation(new Vector3(1f, 0f, 1f), Base.transform.rotation);
-            //Base.transform.Translate(new Vector3(1f,0f,1f));
+                blocks[0].CollisionDetect = true;
+                Base.transform.SetPositionAndRotation(new Vector3(1f, 0f, 1f), Base.transform.rotation);
+                //Base.transform.Translate(new Vector3(1f,0f,1f));
+            }   
         }
     }
 }
