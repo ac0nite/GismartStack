@@ -1671,12 +1671,12 @@ GameObject:
   - component: {fileID: 6795729227687364256}
   - component: {fileID: 246295203390589490}
   m_Layer: 0
-  m_Name: BlockPrefab
+  m_Name: BlockPrefabXXX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3023048845772709362
 Transform:
   m_ObjectHideFlags: 0
@@ -1721,4 +1721,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _removeAfterCollision: 1
   CollisionDetect: 1
-  Movement: {fileID: 0}
+  BlockColor: {fileID: 0}

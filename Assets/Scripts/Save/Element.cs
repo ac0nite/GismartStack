@@ -8,8 +8,8 @@ public class Element
     public Vector3 Position;
     public Quaternion Rotation;
     public Vector3 Scale;
-    public Color Color;
-    public Gradient Gradient;
+    //public Color Color;
+    //public Gradient Gradient;
 
     public Element(Transform t)
     {

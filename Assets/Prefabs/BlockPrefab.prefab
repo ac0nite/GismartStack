@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 849354501581886837}
   - component: {fileID: 6795729227810779776}
   - component: {fileID: 246295202931129874}
+  - component: {fileID: 705276593750498997}
   m_Layer: 0
   m_Name: BlockPrefab
   m_TagString: Untagged
@@ -125,7 +126,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f77cddf8d58d034db2817cb2c07fd1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _removeAfterCollision: 1.5
   CollisionDetect: 0
+  BlockColor: {fileID: 705276593750498997}
 --- !u!114 &246295202931129874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,8 +143,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveDirection: {fileID: 3023048845883009490}
   _comeMove: 1
-  _speed: 5
-  _incrementSpeed: 0.1
+--- !u!114 &705276593750498997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 849354501581886842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18ef1228eaa41d4eb87c1773ddf5b02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3733451215946612204
 GameObject:
   m_ObjectHideFlags: 0

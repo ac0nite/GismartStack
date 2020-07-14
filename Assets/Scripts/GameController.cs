@@ -30,22 +30,22 @@ public class GameController : Singletone<GameController>
 
     protected override void Awake()
     {
+        if (TryInstance != null)
+        {
+            //if(_uiManager != null)
+            _uiManager.EventGoGame += OnGoGame;
+            // if(_clickDetect != null)
+            _clickDetect.EventEndLoadScreen += OnLoadPreviousRound;
+        }
         base.Awake();
-        _uiManager.EventGoGame += OnGoGame;
-        _clickDetect.EventEndLoadScreen += OnLoadPreviousRound;
+       //  //if(_uiManager != null)
+       //      _uiManager.EventGoGame += OnGoGame;
+       // // if(_clickDetect != null)
+       //      _clickDetect.EventEndLoadScreen += OnLoadPreviousRound;
     }
 
     private void Start()
     {
-        //CreateBlock(BlockPrefab.transform);
-
-        //DEBUG
-        // Saving.Instance.Read();
-        // foreach (var block in Saving.Instance.Data.list)
-        // { 
-        //     CreateBlock(block.Position, block.Scale);
-        // }
-        //end DEBUG
     }
 
     private void Update()
@@ -73,7 +73,8 @@ public class GameController : Singletone<GameController>
     {
         var block = Instantiate(BlockPrefab);
         block.transform.localScale = _newBlock.localScale;
-
+        block.BlockColor.setColor();
+        
         //var nextPoint = PointBegin[UnityEngine.Random.Range(0, PointBegin.Count)];
         block.SetPoint(PointBegin[UnityEngine.Random.Range(0, PointBegin.Count)], _newBlock.position);
         block.SetEventTap();
@@ -101,6 +102,7 @@ public class GameController : Singletone<GameController>
         Debug.Log("Exit Rount");
 
         var stack = Base.gameObject.GetComponentsInChildren<BlockCollision>();
+        Saving.Instance.Clear();
         foreach (var block in stack)
         {
             Saving.Instance.Append(block.transform);
@@ -111,11 +113,18 @@ public class GameController : Singletone<GameController>
         EventChangeRecord?.Invoke();
     }
 
-    private void OnDestroy()
+    private void OnApplicationQuit()
     {
-        //_tapDetect.EventStartTapClick -= OnStartTapClick;
-        _uiManager.EventGoGame -= OnGoGame;
-        _clickDetect.EventEndLoadScreen -= OnLoadPreviousRound;
+        if (TryInstance != null)
+        {
+            _uiManager.EventGoGame -= OnGoGame;
+            _clickDetect.EventEndLoadScreen -= OnLoadPreviousRound;   
+        }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
     }
 
     private void OnStartTapClick()
@@ -125,9 +134,11 @@ public class GameController : Singletone<GameController>
 
     private void OnLoadPreviousRound()
     {
+        Debug.Log("OnLoadPreviousRound");
         Init(true);
         if (Saving.Instance.Read())
         {
+            Debug.Log("LoadPreviousRound");
             foreach (var block in Saving.Instance.Data.list)
             { 
                 CreateBlock(block.Position, block.Scale).transform.SetParent(Base.transform);
@@ -135,9 +146,11 @@ public class GameController : Singletone<GameController>
         }
         else
         {
-            var block = CreateBlock(BlockPrefab.transform.position, BlockPrefab.transform.localScale);
+            Debug.Log($"create one block");
+            //var block = CreateBlock(new Vector3(-1f, 0f, -1f), BlockPrefab.transform.localScale);
+            var block = CreateBlock(Vector3.zero, BlockPrefab.transform.localScale);
             block.transform.SetParent(Base.transform);
-            block.Movement.Stop();
+            block.CollisionDetect = true;
         }
     }
     private void OnGoGame()
@@ -162,10 +175,10 @@ public class GameController : Singletone<GameController>
         var blocks = Base.GetComponentsInChildren<BlockCollision>().ToList();
         
         //если чистая сцена
-        if (blocks.Count == 0)
-        {
-            CreateBlock(BlockPrefab.transform);
-        }
+        // if (blocks.Count == 0)
+        // {
+        //     CreateBlock(BlockPrefab.transform);
+        // }
         
         //удаление всех блоков
         if (clean)
@@ -186,7 +199,9 @@ public class GameController : Singletone<GameController>
                 }
 
                 blocks[0].CollisionDetect = true;
-                Base.transform.SetPositionAndRotation(new Vector3(1f, 0f, 1f), Base.transform.rotation);
+                blocks[0].transform.SetPositionAndRotation(Vector3.zero, Base.transform.rotation);
+                //Base.transform.SetPositionAndRotation(new Vector3(1f, 0f, 1f), Base.transform.rotation);
+                Debug.Log("@@@@@");
                 //Base.transform.Translate(new Vector3(1f,0f,1f));
             }   
         }

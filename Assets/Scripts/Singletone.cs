@@ -38,4 +38,9 @@ public class Singletone<T> : MonoBehaviour where T: Singletone<T>
 
         DontDestroyOnLoad(this.gameObject);
     }
+
+    protected virtual void OnDestroy()
+    {
+        Debug.Log($"OnDestroySingleton");
+    }
 }

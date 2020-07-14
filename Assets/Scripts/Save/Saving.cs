@@ -26,12 +26,18 @@ public class Saving : Singletone<Saving>
         Data.Score = score;
     }
 
+    public void Clear()
+    {
+        Data.Clear();
+    }
+
     public void Write()
     {
         Data.UpdateDate();
         string content = JsonUtility.ToJson(Data);
         string path = Application.persistentDataPath + "/" + _file;
         Debug.Log($"Path Save: {path}");
+        File.Delete(path);
         File.WriteAllText(path, content);
     }
 

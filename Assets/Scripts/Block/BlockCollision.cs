@@ -16,9 +16,10 @@ public class BlockCollision : MonoBehaviour
     public event Action<BlockCollision, BlockCollision> EventDestroyBlock;
     public event Action<BlockCollision> EventExitRaund;
     public bool CollisionDetect = false;
-    public BlockMovement Movement = null;
+    public BlockMovement Movement { get; private set; }
     private Rigidbody _rigidbody = null;
     private Collider _collider = null;
+    [SerializeField] public BlockColor BlockColor = null;
     private void Awake()
     {
         //Debug.Log($"Awake: {gameObject.name}", gameObject);
