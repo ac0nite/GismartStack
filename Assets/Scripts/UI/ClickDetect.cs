@@ -33,14 +33,14 @@ namespace Assets.Scripts.UI
             if (!_lockTapClick)
             {
                 _animator.SetTrigger("End");
-                Debug.Log($"OnPointerClick");
+                //Debug.Log($"OnPointerClick");
                 LockTap();
             }
         }
 
         private void EndScreenAnimation()
         {
-            Debug.Log($"EndAnimation");
+//            Debug.Log($"EndAnimation");
             _lockTapClick = false;
             EventEndLoadScreen?.Invoke();
         }

@@ -11,9 +11,9 @@ public class Data
     public List<Element> list = new List<Element>();
     public int Score { get ; set; }
 
-    public void Add(Transform _transform)
+    public void Add(Transform _transform, Color color)
     {
-        list.Add(new Element(_transform));
+        list.Add(new Element(_transform, color));
     }
 
     public void UpdateDate()

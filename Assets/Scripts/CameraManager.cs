@@ -17,7 +17,7 @@ public class CameraManager : MonoBehaviour
     {
         _camera = Camera.main;
         _defualtTransformCamera = _camera.transform;
-        Debug.Log($"_defualtTransformCamera: {_defualtTransformCamera.transform.position}");
+//        Debug.Log($"_defualtTransformCamera: {_defualtTransformCamera.transform.position}");
         _nextViewCamera = _defualtTransformCamera.transform.position;
         _currentViewCamera = _defualtTransformCamera.transform.position;
         GameController.Instance.EventChangeRecord += OnChangeCameraView;

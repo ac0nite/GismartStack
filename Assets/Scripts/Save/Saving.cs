@@ -16,14 +16,9 @@ public class Saving : Singletone<Saving>
         Data.Clear();
     }
 
-    public void Append(Transform block)
+    public void Append(Transform block, Color color)
     {
-        Data.Add(block);
-    }
-
-    public void Append(int score)
-    {
-        Data.Score = score;
+        Data.Add(block, color);
     }
 
     public void Clear()

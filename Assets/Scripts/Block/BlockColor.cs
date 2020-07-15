@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class BlockColor : MonoBehaviour
 {
-
+    public Color Color { get; set; }
     public void setColor()
+    {
+        Color = GradientManager.Instance.GetColor();
+    }
+
+    public void applyColor()
     {
         var renderer = GetComponent<Renderer>();
         Material material = renderer.material;
-        material.SetColor("_Color", Color.red);
+        material.SetColor("_Color", Color);
         renderer.material = material;
     }
-    // Start is called before the first frame update
-    void Start()
+    
+    public void applyColor(Color color)
     {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Color = color;
+        applyColor();
     }
 }

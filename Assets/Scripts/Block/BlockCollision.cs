@@ -119,6 +119,8 @@ public class BlockCollision : MonoBehaviour
 
         block.transform.localScale = scale;
         block.transform.position = position;
+        block.BlockColor.Color = BlockColor.Color;
+        block.BlockColor.applyColor();
         
         int direction = 1;
         if (Math.Abs(Vector3.Dot(Movement.Forward(), Vector3.forward)) < 0.001f)

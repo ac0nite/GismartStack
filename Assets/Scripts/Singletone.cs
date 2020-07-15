@@ -41,6 +41,6 @@ public class Singletone<T> : MonoBehaviour where T: Singletone<T>
 
     protected virtual void OnDestroy()
     {
-        Debug.Log($"OnDestroySingleton");
+//        Debug.Log($"OnDestroySingleton");
     }
 }
