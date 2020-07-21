@@ -51,7 +51,8 @@ public class BlockMovement : MonoBehaviour
                 _moveDirection.Rotate(Vector3.up, 180f);
             }
 
-            _transform.Translate(Forward() * (_speed * Time.deltaTime));   
+            //_transform.Translate(Forward() * (_speed * Time.deltaTime));
+            _transform.position = Vector3.Lerp(_transform.position, _transform.position + Forward(), _speed * Time.deltaTime);
         }
     }
     

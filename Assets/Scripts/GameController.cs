@@ -19,6 +19,8 @@ public class GameController : Singletone<GameController>
     [SerializeField] private CameraManager _cameraManager = null;
     [SerializeField] private ClickDetect _clickDetect = null;
     private bool _game = false;
+    private Vector3 _targetBase = Vector3.zero;
+    private Vector3 _Base = Vector3.zero;
 
     //[SerializeField] private ClickDetect _tapDetect = null;
     [SerializeField] private UIManager _uiManager = null;
@@ -37,11 +39,9 @@ public class GameController : Singletone<GameController>
             // if(_clickDetect != null)
             _clickDetect.EventEndLoadScreen += OnLoadPreviousRound;
         }
+
         base.Awake();
-       //  //if(_uiManager != null)
-       //      _uiManager.EventGoGame += OnGoGame;
-       // // if(_clickDetect != null)
-       //      _clickDetect.EventEndLoadScreen += OnLoadPreviousRound;
+        _targetBase = Base.transform.position;
     }
 
     private void Start()
@@ -52,7 +52,8 @@ public class GameController : Singletone<GameController>
     {
         if(_game && Input.GetMouseButtonDown(0))
             EventTapDown?.Invoke();
-        //if(Input.GetKeyDown(KeyCode.Space))
+        
+        Base.transform.position = Vector3.Lerp(Base.transform.position, _targetBase, Speed * Time.deltaTime);
     }
 
     private void OnDestroyBlock(BlockCollision _nextBlock, BlockCollision _oldBlock)
@@ -63,8 +64,11 @@ public class GameController : Singletone<GameController>
         _oldBlock.EventExitRaund -= OnExitRaund;
         
         Destroy(_oldBlock.gameObject);
-        Base.transform.Translate(-Vector3.up * (_nextBlock.transform.localScale.y));
-        //Camera.main.transform.Translate(Vector3.up * (_nextBlock.transform.localScale.y));
+        
+        _targetBase = _targetBase + (Vector3.down * (_nextBlock.transform.localScale.y));
+        //Base.transform.Translate(Vector3.down * (_nextBlock.transform.localScale.y));
+        Vector3 b = Base.transform.position;
+
         CreateBlock(_nextBlock.transform);
         EventChangeScore?.Invoke();
     }
