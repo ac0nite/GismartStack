@@ -14,10 +14,11 @@ public class GameController : Singletone<GameController>
     [SerializeField] public BlockCollision BlockPrefab = null;
     [SerializeField] public List<Transform> PointBegin = null;
     [SerializeField] public Transform Base = null;
-    [SerializeField] public float Speed = 10f;
+    [SerializeField] public float Speed = 6f;
     [SerializeField] private float _incrementSpeed = 0.1f;
     [SerializeField] private CameraManager _cameraManager = null;
     [SerializeField] private ClickDetect _clickDetect = null;
+    private float _startSpeed = 0f;
     private bool _game = false;
     private Vector3 _targetBase = Vector3.zero;
     private Vector3 _Base = Vector3.zero;
@@ -42,6 +43,7 @@ public class GameController : Singletone<GameController>
 
         base.Awake();
         _targetBase = Base.transform.position;
+        _startSpeed = Speed;
     }
 
     private void Start()
@@ -53,7 +55,7 @@ public class GameController : Singletone<GameController>
         if(_game && Input.GetMouseButtonDown(0))
             EventTapDown?.Invoke();
         
-        Base.transform.position = Vector3.Lerp(Base.transform.position, _targetBase, Speed * Time.deltaTime);
+       // Base.transform.position = Vector3.Lerp(Base.transform.position, _targetBase, Speed * Time.deltaTime);
     }
 
     private void OnDestroyBlock(BlockCollision _nextBlock, BlockCollision _oldBlock)
@@ -66,7 +68,7 @@ public class GameController : Singletone<GameController>
         Destroy(_oldBlock.gameObject);
         
         _targetBase = _targetBase + (Vector3.down * (_nextBlock.transform.localScale.y));
-        //Base.transform.Translate(Vector3.down * (_nextBlock.transform.localScale.y));
+        Base.transform.Translate(Vector3.down * (_nextBlock.transform.localScale.y));
         Vector3 b = Base.transform.position;
 
         CreateBlock(_nextBlock.transform);
@@ -167,6 +169,7 @@ public class GameController : Singletone<GameController>
         
         CreateBlock(BlockPrefab.transform);
         _game = true;
+        Speed = _startSpeed;
         //DEBUG
         // Saving.Instance.Read();
         // foreach (var block in Saving.Instance.Data.list)

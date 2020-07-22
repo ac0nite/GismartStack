@@ -15,8 +15,8 @@ public class GradientManager : Singletone<GradientManager>
         _firstColor = RandomColor();
         _secondColor = RandomColor();
         _gradient = new Gradient();
-        colorKeys = new GradientColorKey[5];
-        alphaKeys = new GradientAlphaKey[5];
+        colorKeys = new GradientColorKey[6];
+        alphaKeys = new GradientAlphaKey[6];
         GenerateGradient();
     }
 
@@ -42,8 +42,8 @@ public class GradientManager : Singletone<GradientManager>
         // alphaKeys[1].time = -1.0F;
         // alphaKeys[1].alpha = 0.0F;
         // alphaKeys[1].time = -1.0F;
-        float steps = 5 - 1f;
-        for (int i = 0; i < 5; i++)
+        float steps = 6 - 1f;
+        for (int i = 0; i < 6; i++)
         {
             float step = i / steps;
             colorKeys[i].color = RandomColor();

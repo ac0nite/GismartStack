@@ -68,9 +68,9 @@ public class BlockCollision : MonoBehaviour
 
         var arr_point = _contactPoints.Select(a => a.point).ToList();
 
-        Debug.DrawLine(arr_point[0], arr_point[1], Color.green, 2f);
-        Debug.DrawLine(arr_point[0], arr_point[2], Color.green, 2f);
-        Debug.DrawLine(arr_point[0], arr_point[3], Color.green, 2f);
+        Debug.DrawLine(arr_point[0], arr_point[1], Color.green, 1f);
+        Debug.DrawLine(arr_point[0], arr_point[2], Color.green, 1f);
+        Debug.DrawLine(arr_point[0], arr_point[3], Color.green, 1f);
         List<Vector3> point = new List<Vector3>();
 
         point.Add(arr_point[0] - arr_point[1]);
@@ -85,10 +85,10 @@ public class BlockCollision : MonoBehaviour
         Vector3 bv = point[1];
         
         Debug.Log($"  old scale:{transform.localScale}  position:{transform.position}");
-        Debug.Log($"AV: {av.magnitude}  BV:{bv.magnitude}");
+        Debug.Log($"side: {point[0].magnitude}  {point[1].magnitude} {point[2].magnitude}");
         
         Vector3 center = Vector3.Lerp(arr_point[0] - point[0], arr_point[0] - point[1], 0.5f);
-        Debug.DrawLine(arr_point[0], center, Color.blue, 10f);
+        Debug.DrawLine(arr_point[0], center, Color.blue, 1f);
 
         var forward = transform.worldToLocalMatrix.MultiplyVector(transform.forward);
         
@@ -102,7 +102,7 @@ public class BlockCollision : MonoBehaviour
         
         var side = Math.Abs(Vector3.Dot(av.normalized, Vector3.forward));
         Debug.Log($"dot: {side}");
-        if (side == 1f)
+        if (side >= 0.9f)
         {
             scale = new Vector3(bv.magnitude, transform.localScale.y, av.magnitude);   
         }
@@ -113,7 +113,7 @@ public class BlockCollision : MonoBehaviour
 
 
         //           Debug.Log($"AV: {av.magnitude}  BV:{bv.magnitude}");
-//        Debug.Log($"scale: {scale}");
+        Debug.Log($"scale: {scale}");
 
         var block = Instantiate(GameController.Instance.BlockPrefab);
 
@@ -127,7 +127,8 @@ public class BlockCollision : MonoBehaviour
         {
             Debug.Log("left-right");
             direction = (block.transform.position.x > transform.position.x) ? -1 : 1;
-            var delta_x = (Math.Abs(Vector3.Dot(av.normalized, Vector3.left)) == 1f) ? av.magnitude : bv.magnitude;
+            var delta_x = (Math.Abs(Vector3.Dot(av.normalized, Vector3.left)) >= 0.9f) ? av.magnitude : bv.magnitude;
+            Debug.Log($"delta_x: {delta_x}");
             transform.position = new Vector3(transform.position.x + delta_x/2f * direction, transform.position.y, transform.position.z);
             transform.localScale = new Vector3(transform.localScale.x - delta_x, transform.localScale.y, transform.localScale.z);
             
@@ -137,7 +138,8 @@ public class BlockCollision : MonoBehaviour
         {
             Debug.Log("top-botton");
             direction = (block.transform.position.z > transform.position.z) ? -1 : 1;
-            var delta_z = (Math.Abs(Vector3.Dot(av.normalized, Vector3.forward)) == 1f) ? av.magnitude : bv.magnitude;
+            var delta_z = (Math.Abs(Vector3.Dot(av.normalized, Vector3.forward)) >= 0.9f) ? av.magnitude : bv.magnitude;
+            Debug.Log($"delta_z: {delta_z}");
             transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + delta_z/2f * direction);
             transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, transform.localScale.z - delta_z);
             
