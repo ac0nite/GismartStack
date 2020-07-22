@@ -55,7 +55,7 @@ public class GameController : Singletone<GameController>
         if(_game && Input.GetMouseButtonDown(0))
             EventTapDown?.Invoke();
         
-       // Base.transform.position = Vector3.Lerp(Base.transform.position, _targetBase, Speed * Time.deltaTime);
+        Base.transform.position = Vector3.Lerp(Base.transform.position, _targetBase, Speed * Time.deltaTime);
     }
 
     private void OnDestroyBlock(BlockCollision _nextBlock, BlockCollision _oldBlock)
@@ -68,7 +68,7 @@ public class GameController : Singletone<GameController>
         Destroy(_oldBlock.gameObject);
         
         _targetBase = _targetBase + (Vector3.down * (_nextBlock.transform.localScale.y));
-        Base.transform.Translate(Vector3.down * (_nextBlock.transform.localScale.y));
+        //Base.transform.Translate(Vector3.down * (_nextBlock.transform.localScale.y));
         Vector3 b = Base.transform.position;
 
         CreateBlock(_nextBlock.transform);

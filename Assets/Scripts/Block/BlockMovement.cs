@@ -11,6 +11,7 @@ public class BlockMovement : MonoBehaviour
     private float _maxDistanceMovementBlock = 0f;
     private bool _axis = true; //true - x, false - z
     private Transform _transform = null;
+    private Vector3 _target = Vector3.zero;
 
     private void Awake()
     {
@@ -33,6 +34,7 @@ public class BlockMovement : MonoBehaviour
                 _maxDistanceMovementBlock = Math.Abs(_transform.position.x);
                 _axis = false;
             }   
+            //_target = Forward() * _maxDistanceMovementBlock;
         }
     }
 
@@ -45,14 +47,19 @@ public class BlockMovement : MonoBehaviour
                 distance = _moveDirection.transform.position.z;
             else
                 distance = _moveDirection.transform.position.x;
-
+            
             if (Math.Abs(distance) > _maxDistanceMovementBlock)
             {
                 _moveDirection.Rotate(Vector3.up, 180f);
             }
+            // if (_target.magnitude - _transform.position.magnitude <= 0.5f)
+            // {
+            //     _moveDirection.Rotate(Vector3.up, 180f);
+            //     _target = Forward() * _maxDistanceMovementBlock;
+            // }
 
             //_transform.Translate(Forward() * (_speed * Time.deltaTime));
-            _transform.position = Vector3.Lerp(_transform.position, _transform.position + Forward(), _speed * Time.deltaTime);
+            _transform.position = Vector3.Lerp(_transform.position, Forward() + _transform.position,  _speed / 2f * Time.deltaTime);
         }
     }
     
