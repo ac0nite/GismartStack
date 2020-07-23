@@ -8,12 +8,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Background
-  m_Shader: {fileID: 4800000, guid: 62de916e347671e458010e43794b04dd, type: 3}
+  m_Shader: {fileID: 4800000, guid: c162499ac550f4347ab86ce6c6a36863, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
@@ -75,7 +75,8 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SrcOneValue: {r: 1, g: 0, b: 0.15558338, a: 1}
+    - _SrcOneValue: {r: 0.15362263, g: 1, b: 0, a: 1}
+    - _SrcTwoValue: {r: 0.9433962, g: 0, b: 0, a: 1}
     - _SrcZeroValue: {r: 0, g: 1, b: 0.18899345, a: 1}
     - _TargetOneValue: {r: 0.023584902, g: 1, b: 0.43511474, a: 1}
     - _TargetZeroValue: {r: 0.93450105, g: 1, b: 0, a: 1}

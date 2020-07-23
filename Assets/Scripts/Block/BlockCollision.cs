@@ -121,7 +121,7 @@ public class BlockCollision : MonoBehaviour
         block.transform.position = position;
         block.BlockColor.Color = BlockColor.Color;
         block.BlockColor.applyColor();
-        block._rigidbody.isKinematic = false;
+        //block._rigidbody.isKinematic = false;
         
         int direction = 1;
         if (Math.Abs(Vector3.Dot(Movement.Forward(), Vector3.forward)) < 0.001f)

@@ -10,14 +10,19 @@ public class GradientManager : Singletone<GradientManager>
     private GradientAlphaKey[] alphaKeys;
     private Color _firstColor;
     private Color _secondColor;
-    void Start()
+    protected override void Awake()
     {
+        base.Awake();
         _firstColor = RandomColor();
         _secondColor = RandomColor();
         _gradient = new Gradient();
         colorKeys = new GradientColorKey[6];
         alphaKeys = new GradientAlphaKey[6];
         GenerateGradient();
+    }
+
+    void Start()
+    {
     }
 
     private Color RandomColor()
@@ -71,5 +76,15 @@ public class GradientManager : Singletone<GradientManager>
             GenerateGradient();
         }
         return _gradient.Evaluate(_evalute);
+    }
+
+    public Color GetFromColor()
+    {
+        return _gradient.Evaluate(0.00f);
+    }
+
+    public Color GetToColor()
+    {
+        return _gradient.Evaluate(1f);
     }
 }
