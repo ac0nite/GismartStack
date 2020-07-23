@@ -30,10 +30,11 @@ public class GradientManager : Singletone<GradientManager>
         return new Color(Gen(), Gen(), Gen());
     }
 
-    private void GenerateGradient()
+    public void GenerateGradient()
     {
         Debug.Log($"first: {_firstColor}  second: {_secondColor}");
-
+        _evalute = 0f;
+        
         // colorKeys[0].color = Color.green;
         // colorKeys[0].time = 1.0F;
         // colorKeys[1].color = Color.red;
@@ -80,7 +81,7 @@ public class GradientManager : Singletone<GradientManager>
 
     public Color GetFromColor()
     {
-        return _gradient.Evaluate(0.00f);
+        return _gradient.Evaluate(0f);
     }
 
     public Color GetToColor()

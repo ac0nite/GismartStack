@@ -20,6 +20,12 @@ public class Saving : Singletone<Saving>
         Data.Add(block, color);
     }
 
+    public void Append(Color from, Color to)
+    {
+        Data.fromColor = from;
+        Data.toColor = to;
+    }
+
     public void Clear()
     {
         Data.Clear();

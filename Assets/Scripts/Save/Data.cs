@@ -9,6 +9,8 @@ public class Data
 {
     public string DateTime { get; private set; }
     public List<Element> list = new List<Element>();
+    public Color fromColor = Color.black;
+    public Color toColor = Color.black;
     public int Score { get ; set; }
 
     public void Add(Transform _transform, Color color)

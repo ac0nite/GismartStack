@@ -18,6 +18,7 @@ public class GameController : Singletone<GameController>
     [SerializeField] private float _incrementSpeed = 0.1f;
     [SerializeField] private CameraManager _cameraManager = null;
     [SerializeField] private ClickDetect _clickDetect = null;
+    [SerializeField] private BackGroundColor _backGround = null;
     private float _startSpeed = 0f;
     private bool _game = false;
     private Vector3 _targetBase = Vector3.zero;
@@ -117,6 +118,8 @@ public class GameController : Singletone<GameController>
             Saving.Instance.Append(block.transform, block.BlockColor.Color);
         }
         
+        Saving.Instance.Append(_backGround.FromColor, _backGround.ToColor);
+        
         Saving.Instance.Write();
         EventChangeRecord?.Invoke();
     }
@@ -150,7 +153,8 @@ public class GameController : Singletone<GameController>
             foreach (var block in Saving.Instance.Data.list)
             { 
                 CreateBlock(block.Position, block.Scale, block.Color).transform.SetParent(Base.transform);
-            }   
+            }
+            _backGround.Apply(Saving.Instance.Data.fromColor, Saving.Instance.Data.toColor);
         }
         else
         {
@@ -164,7 +168,10 @@ public class GameController : Singletone<GameController>
     private void OnGoGame()
     {
         Debug.Log($"OnGoGame");
-
+        
+        GradientManager.Instance.GenerateGradient();
+        _backGround.ResetColor();
+        
         Init(false);
         
         CreateBlock(BlockPrefab.transform);

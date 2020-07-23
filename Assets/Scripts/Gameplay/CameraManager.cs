@@ -7,28 +7,23 @@ public class CameraManager : MonoBehaviour
 {
     private Camera _camera = null;
     [SerializeField] private UIManager _uiManager = null;
-    private Transform _defualtTransformCamera = null;
+    private Vector3 _defaultPositionCamera = Vector3.zero;
     private Vector3 _currentViewCamera = Vector3.zero;
     private Vector3 _nextViewCamera = Vector3.zero;
 
     [SerializeField] private Transform BaseCube = null;
     [SerializeField] private Transform _plane = null;
-    private List<Vector3> points = new List<Vector3>();
 
     private void Awake()
     {
         _camera = Camera.main;
-        _defualtTransformCamera = _camera.transform;
-//        Debug.Log($"_defualtTransformCamera: {_defualtTransformCamera.transform.position}");
-        _nextViewCamera = _defualtTransformCamera.transform.position;
-        _currentViewCamera = _defualtTransformCamera.transform.position;
+        _defaultPositionCamera = _camera.transform.position;
+        _nextViewCamera = _defaultPositionCamera;
+        _currentViewCamera = _defaultPositionCamera;
         GameController.Instance.EventChangeRecord += OnChangeCameraView;
         _uiManager.EventGoGame += OnSetDefaultCamera;
-
-        points.Add(new Vector3(_plane.transform.position.x + _plane.localScale.x / 2, _plane.transform.position.y + _plane.localScale.y/2, _plane.localScale.z ));
-        points.Add(new Vector3(_plane.transform.position.x - _plane.localScale.x / 2, _plane.transform.position.y + _plane.localScale.y / 2, _plane.localScale.z));
-        points.Add(new Vector3(_plane.transform.position.x - _plane.localScale.x / 2, _plane.transform.position.y - _plane.localScale.y / 2, _plane.localScale.z));
-        points.Add(new Vector3(_plane.transform.position.x + _plane.localScale.x / 2, _plane.transform.position.y - _plane.localScale.y / 2, _plane.localScale.z));
+        
+        Debug.Log($"_defualtTransformCamera: {_defaultPositionCamera}");
     }
 
     private void OnDestroy()
@@ -39,9 +34,8 @@ public class CameraManager : MonoBehaviour
 
     private void OnSetDefaultCamera()
     {
-        //lerp?
-        //transform.SetPositionAndRotation(_defualtTransformCamera.position, _defualtTransformCamera.rotation);
-        _nextViewCamera = _defualtTransformCamera.transform.position;
+        Debug.Log($"OnSetDefaultCamera: {_defaultPositionCamera}");
+        _nextViewCamera = _defaultPositionCamera;
     }
 
     private void OnChangeCameraView()
@@ -54,7 +48,7 @@ public class CameraManager : MonoBehaviour
         var blocks = BaseCube.GetComponentsInChildren<BlockCollision>();
         if (blocks.Length == 1)
         {
-            _nextViewCamera = _defualtTransformCamera.position;
+            _nextViewCamera = _defaultPositionCamera;
             return;
         }
         
@@ -70,12 +64,7 @@ public class CameraManager : MonoBehaviour
 
         Debug.Log($"max: {max}  min: {min}");
 
-        //_nextViewCamera = _nextViewCamera.normalized * (_nextViewCamera.magnitude + (max - min));
-
-        // foreach (var block in blocks)
-        // {
-        //     Debug.Log($"ViePortBlock: {_camera.WorldToViewportPoint(block.transform.position)}  position: {block.transform.position}", block);
-        // }
+        _nextViewCamera = _nextViewCamera.normalized * (_nextViewCamera.magnitude + (max - min));
     }
 
     // Start is called before the first frame update
@@ -91,38 +80,25 @@ public class CameraManager : MonoBehaviour
         var b = _camera.ViewportToWorldPoint(new Vector3(1, 0, _camera.farClipPlane));
         var c = _camera.ViewportToWorldPoint(new Vector3(0, 1, _camera.farClipPlane));
 
-        //var a = _camera.ViewportToScreenPoint(new Vector3(0, 0, _camera.farClipPlane));
-        //var b = _camera.ViewportToScreenPoint(new Vector3(1, 0, _camera.farClipPlane));
-        //var c = _camera.ViewportToScreenPoint(new Vector3(0, 1, _camera.farClipPlane));
-
         Debug.DrawLine(a, b, Color.red, 1f); //x
         Debug.DrawLine(b, c, Color.grey, 1f);
         Debug.DrawLine(c, a, Color.blue, 1f); //y
 
         var center = Vector3.Lerp(b, c, 0.5f);
+        center.y += 0.5f;
         //Debug.DrawLine(c, center, Color.red, 1f);
 
         var x1 = (a - b).magnitude;
         var x2 = (c - a).magnitude;
-        Debug.Log($"{x1}  {x2}");
-
-        //var a1 = _plane.transform.TransformPoint(a);
-        //var b1 = _plane.transform.TransformPoint(b);
-        //var c1 = _plane.transform.TransformPoint(c);
-
-        //Debug.DrawLine(a1, b1, Color.red, 1f); //x
-        //Debug.DrawLine(b1, c1, Color.grey, 1f);
-        //Debug.DrawLine(c1, a1, Color.blue, 1f); //
+//        Debug.Log($"{x1}  {x2}");
 
         _plane.transform.localScale = new Vector3((b-a).magnitude / 10,  _plane.transform.localScale.y, (a - c).magnitude / 10);
-        //_plane.transform.SetPositionAndRotation(center, _plane.transform.rotation);
+        _plane.transform.SetPositionAndRotation(center, _plane.transform.rotation);
     }
 
     void LateUpdate()
     {
-        _currentViewCamera = Vector3.Lerp(_camera.transform.position, _nextViewCamera, 0.5f * Time.deltaTime);
-//        Debug.Log($"c:{_camera.transform.position}  n:{_currentViewCamera}");
+        _currentViewCamera = Vector3.Lerp(_camera.transform.position, _nextViewCamera, 5f * Time.deltaTime);
         _camera.transform.SetPositionAndRotation(_currentViewCamera, _camera.transform.rotation);
-        //_camera.transform.Translate(_currentViewCamera);
     }
 }
