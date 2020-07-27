@@ -16,7 +16,6 @@ public class UIManager : MonoBehaviour
 
     void Start()
     {
-       // _animator = GetComponentInChildren<Animator>();
     }
 
     private void OnDestroy()

@@ -244,8 +244,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 35.01
+  near clip plane: 0.01
+  far clip plane: 65
   field of view: 85.3
   orthographic: 0
   orthographic size: 5
@@ -868,7 +868,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -67.649994, y: -58.78302}
+  m_AnchoredPosition: {x: -67.64996, y: -58.78296}
   m_SizeDelta: {x: 62.5, y: 102.25}
   m_Pivot: {x: 0.5, y: 0.42510557}
 --- !u!114 &815648693

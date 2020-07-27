@@ -80,17 +80,15 @@ public class CameraManager : MonoBehaviour
         var b = _camera.ViewportToWorldPoint(new Vector3(1, 0, _camera.farClipPlane));
         var c = _camera.ViewportToWorldPoint(new Vector3(0, 1, _camera.farClipPlane));
 
-        Debug.DrawLine(a, b, Color.red, 1f); //x
-        Debug.DrawLine(b, c, Color.grey, 1f);
-        Debug.DrawLine(c, a, Color.blue, 1f); //y
+        //Debug.DrawLine(a, b, Color.red, 1f); //x
+        //Debug.DrawLine(b, c, Color.grey, 1f);
+        //Debug.DrawLine(c, a, Color.blue, 1f); //y
 
         var center = Vector3.Lerp(b, c, 0.5f);
         center.y += 0.5f;
-        //Debug.DrawLine(c, center, Color.red, 1f);
 
         var x1 = (a - b).magnitude;
         var x2 = (c - a).magnitude;
-//        Debug.Log($"{x1}  {x2}");
 
         _plane.transform.localScale = new Vector3((b-a).magnitude / 10,  _plane.transform.localScale.y, (a - c).magnitude / 10);
         _plane.transform.SetPositionAndRotation(center, _plane.transform.rotation);

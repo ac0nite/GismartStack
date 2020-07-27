@@ -23,7 +23,6 @@ public class BlockMovement : MonoBehaviour
     {
         if (_comeMove)
         {
-//            Debug.Log($"transform.position: {_transform.position}");
             if (Math.Abs(Vector3.Dot(Forward(), _transform.forward)) > 0.9f)
             {
                 _maxDistanceMovementBlock = Math.Abs(_transform.position.z);
@@ -33,8 +32,7 @@ public class BlockMovement : MonoBehaviour
             {
                 _maxDistanceMovementBlock = Math.Abs(_transform.position.x);
                 _axis = false;
-            }   
-            //_target = Forward() * _maxDistanceMovementBlock;
+            }
         }
     }
 

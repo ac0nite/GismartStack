@@ -22,17 +22,14 @@ public class BlockCollision : MonoBehaviour
     [SerializeField] public BlockColor BlockColor = null;
     private void Awake()
     {
-        //Debug.Log($"Awake: {gameObject.name}", gameObject);
         Movement = GetComponent<BlockMovement>();
         _rigidbody = GetComponent<Rigidbody>();
-        _collider = GetComponent<Collider>();    
-        
-        //GameController.Instance.EventTapDown += OnTapDown;
+        _collider = GetComponent<Collider>();
     }
 
     private void Start()
     {
-        //GameController.Instance.EventTapDown += OnTapDown;
+        
     }
 
     public void SetEventTap()
@@ -42,12 +39,10 @@ public class BlockCollision : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-       // Debug.Log("OnCollisionStay");
     }
 
     private void OnCollisionStay(Collision other)
     {
-        //Debug.Log($"OnCollisionStay {this.gameObject.name} - {_rigidbody.useGravity}", other.transform);
         if(!_rigidbody.useGravity)
             return;
 
@@ -56,14 +51,10 @@ public class BlockCollision : MonoBehaviour
             return;   
         }
 
-        //Debug.Log($"КТО -> ", gameObject);
-       // Debug.Log($"С КЕМ -> ", other.transform);
-       
         other.GetContacts(_contactPoints);
         foreach (ContactPoint contact in _contactPoints)
         {
             Debug.DrawRay(contact.point, contact.normal * 2, Color.red, 1f);
-            //Debug.Log($"{contact.point}");
         }
 
         var arr_point = _contactPoints.Select(a => a.point).ToList();
@@ -78,8 +69,6 @@ public class BlockCollision : MonoBehaviour
         point.Add(arr_point[0] - arr_point[3]);
         
         point.Sort((a, b) => a.magnitude.CompareTo(b.magnitude));
-        
-        //Debug.Log($"DOT: {Math.Abs(Vector3.Dot(point[0].normalized, point[0].normalized))}");
 
         Vector3 av = point[0];
         Vector3 bv = point[1];
@@ -91,9 +80,6 @@ public class BlockCollision : MonoBehaviour
         Debug.DrawLine(arr_point[0], center, Color.blue, 1f);
 
         var forward = transform.worldToLocalMatrix.MultiplyVector(transform.forward);
-        
-        //Debug.Log($"AV: {Math.Abs(Vector3.Dot(av.normalized, forward.normalized))}");
-        //Debug.Log($"BV: {Math.Abs(Vector3.Dot(bv.normalized, forward.normalized))}");
 
         Vector3 scale = Vector3.zero;
         Vector3 position = Vector3.zero;
@@ -111,8 +97,6 @@ public class BlockCollision : MonoBehaviour
             scale = new Vector3(av.magnitude, transform.localScale.y, bv.magnitude);
         }
 
-
-        //           Debug.Log($"AV: {av.magnitude}  BV:{bv.magnitude}");
         Debug.Log($"scale: {scale}");
 
         var block = Instantiate(GameController.Instance.BlockPrefab);
@@ -121,8 +105,7 @@ public class BlockCollision : MonoBehaviour
         block.transform.position = position;
         block.BlockColor.Color = BlockColor.Color;
         block.BlockColor.applyColor();
-        //block._rigidbody.isKinematic = false;
-        
+
         int direction = 1;
         if (Math.Abs(Vector3.Dot(Movement.Forward(), Vector3.forward)) < 0.001f)
         {
@@ -156,8 +139,7 @@ public class BlockCollision : MonoBehaviour
         block._rigidbody.useGravity = true;
         block.Movement.Stop();
         block.CollisionDetect = false;
-        //enabled = false;
-        
+
         other.transform.GetComponent<BlockCollision>().CollisionDetect = false;
         CollisionDetect = false;
     }
@@ -178,11 +160,6 @@ public class BlockCollision : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // if (ComeMove)
-        // {
-        //     transform.Translate(transform.worldToLocalMatrix.MultiplyVector(_directionMove.forward) * (_speed * Time.deltaTime));
-        //     //transform.position = transform.worldToLocalMatrix.MultiplyVector(_directionMove.forward) * (1f * Time.deltaTime);
-        // }
     }
 
     IEnumerator NextBlock(BlockCollision _nextBlock)

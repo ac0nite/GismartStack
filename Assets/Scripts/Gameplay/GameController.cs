@@ -24,7 +24,6 @@ public class GameController : Singletone<GameController>
     private Vector3 _targetBase = Vector3.zero;
     private Vector3 _Base = Vector3.zero;
 
-    //[SerializeField] private ClickDetect _tapDetect = null;
     [SerializeField] private UIManager _uiManager = null;
 
     public event Action EventTapDown;
@@ -36,9 +35,7 @@ public class GameController : Singletone<GameController>
     {
         if (TryInstance != null)
         {
-            //if(_uiManager != null)
             _uiManager.EventGoGame += OnGoGame;
-            // if(_clickDetect != null)
             _clickDetect.EventEndLoadScreen += OnLoadPreviousRound;
         }
 
@@ -61,15 +58,12 @@ public class GameController : Singletone<GameController>
 
     private void OnDestroyBlock(BlockCollision _nextBlock, BlockCollision _oldBlock)
     {
-//        Debug.Log($"_nextBlock!  pos:{_nextBlock.transform.position} scale:{_nextBlock.transform.localScale}");
-
         _oldBlock.EventDestroyBlock -= OnDestroyBlock;
         _oldBlock.EventExitRaund -= OnExitRaund;
         
         Destroy(_oldBlock.gameObject);
         
         _targetBase = _targetBase + (Vector3.down * (_nextBlock.transform.localScale.y));
-        //Base.transform.Translate(Vector3.down * (_nextBlock.transform.localScale.y));
         Vector3 b = Base.transform.position;
 
         CreateBlock(_nextBlock.transform);
@@ -83,7 +77,6 @@ public class GameController : Singletone<GameController>
         block.BlockColor.setColor();
         block.BlockColor.applyColor();
         
-        //var nextPoint = PointBegin[UnityEngine.Random.Range(0, PointBegin.Count)];
         block.SetPoint(PointBegin[UnityEngine.Random.Range(0, PointBegin.Count)], _newBlock.position);
         block.SetEventTap();
         block.EventDestroyBlock += OnDestroyBlock;
@@ -94,7 +87,6 @@ public class GameController : Singletone<GameController>
 
     private BlockCollision CreateBlock(Vector3 position, Vector3 localScale, Color color)
     {
-        //Debug.Log($"CreateBlock Color: {color}");
         var block = Instantiate(BlockPrefab);
         block.transform.localScale = localScale;
         block.transform.SetPositionAndRotation(position, Quaternion.identity);
@@ -159,7 +151,6 @@ public class GameController : Singletone<GameController>
         else
         {
             Debug.Log($"create one block");
-            //var block = CreateBlock(new Vector3(-1f, 0f, -1f), BlockPrefab.transform.localScale);
             var block = CreateBlock(Vector3.zero, BlockPrefab.transform.localScale, GradientManager.Instance.GetColor());
             block.transform.SetParent(Base.transform);
             block.CollisionDetect = true;
@@ -177,25 +168,12 @@ public class GameController : Singletone<GameController>
         CreateBlock(BlockPrefab.transform);
         _game = true;
         Speed = _startSpeed;
-        //DEBUG
-        // Saving.Instance.Read();
-        // foreach (var block in Saving.Instance.Data.list)
-        // { 
-        //     CreateBlock(block.Position, block.Scale);
-        // }
-        //end DEBUG
     }
 
     private void Init(bool clean)
     {
         var blocks = Base.GetComponentsInChildren<BlockCollision>().ToList();
-        
-        //если чистая сцена
-        // if (blocks.Count == 0)
-        // {
-        //     CreateBlock(BlockPrefab.transform);
-        // }
-        
+
         //удаление всех блоков
         if (clean)
         {
@@ -217,9 +195,6 @@ public class GameController : Singletone<GameController>
                 blocks[0].CollisionDetect = true;
                 blocks[0].transform.SetPositionAndRotation(Vector3.zero, Base.transform.rotation);
                 blocks[0].BlockColor.applyColor(GradientManager.Instance.GetColor());
-                //Base.transform.SetPositionAndRotation(new Vector3(1f, 0f, 1f), Base.transform.rotation);
-                Debug.Log("@@@@@");
-                //Base.transform.Translate(new Vector3(1f,0f,1f));
             }   
         }
     }
